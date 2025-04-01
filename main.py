@@ -177,6 +177,7 @@ class Example:
                 col+=1
 
     def StartCards(self):
+        print(123123)
         directory = ".\Images\\S\\"
         files = []
         files += os.listdir(directory)
