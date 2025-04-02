@@ -9,6 +9,13 @@ class Example:
 
         self.curButt = ""
 
+        self.listRed=[]
+        self.listBlue = []
+        self.listYellow = []
+        self.listGreen = []
+
+        self.listOfDisabled = []
+
         file = open('AddList.json')
         listOfAddons = json.load(file)
         file.close()
@@ -139,7 +146,8 @@ class Example:
         # print(self.Addon.get())
         for button in self.listOfButtonsButt:
             button.destroy()
-        self.listOfButtons={
+     
+        self.listOfButtons = {
             "1":[],
             "2":[],
             "3":[],
@@ -158,6 +166,7 @@ class Example:
         for f in files:
             if f[0]==self.Addon.get():
                 self.listOfButtons[str(f[1])].append(str(f))
+                
         # print(self.listOfButtons)
         self.listOfButtonsButt =[]
         for price in range(1,9):
@@ -174,22 +183,17 @@ class Example:
                 img = Image.open(img_dir)
 
                 img = img.resize((w,h))
-                img.save(img_dir)
+                # img.save(img_dir)
 
                 img = ImageTk.PhotoImage(img)
                 
-                # img = PhotoImage(file = img_dir,width=50,height=70)
-                # xi, yi = img.getsize()
-                # img = img.zoom(50,70)
-                # img = img.subsample(xi, yi)
-
-                
-
-                button = tk.Button(self.right_mid, image=img,width=w,height=h,bd=0)
+                button = tk.Button(self.right_mid, image=img,width=w,height=h,bd=0,text=img_dir)
                 button.image = img
                 self.listOfButtonsButt.append(button)
+                if img_dir in self.listOfDisabled:
+                    button['state'] = 'disabled'
                 button.grid(row=price-1,column=col,ipadx=0,ipady=0,padx=0,pady=0)
-                
+                button.bind('<Button-1>',self.AddCard)
                 col+=1
 
     def StartCards(self):
@@ -207,24 +211,27 @@ class Example:
             img = Image.open(img_dir)
             img = img.resize((w,h))
             img = ImageTk.PhotoImage(img)
+            
             r = n//2+1
             c = n%2
-            button = tk.Button(self.RED, image=img,width=w,height=h,bd=0)
+            
+            button = tk.Button(self.RED, image=img,width=w,height=h,bd=0,bg='red')
+            button.image = img
+            
+            button.bind('<Button-1>',self.SelectCardPlayer)
+            self.listRed.append(button)
+
+            button = tk.Button(self.GREEN, image=img,width=w,height=h,bd=0,bg = 'green')
             button.image = img
             button.grid(row=r,column=c)
             button.bind('<Button-1>',self.SelectCardPlayer)
 
-            button = tk.Button(self.GREEN, image=img,width=w,height=h,bd=0)
-            button.image = img
-            button.grid(row=r,column=c)
-            button.bind('<Button-1>',self.SelectCardPlayer)
-
-            button = tk.Button(self.YELLOW, image=img,width=w,height=h,bd=0)
+            button = tk.Button(self.YELLOW, image=img,width=w,height=h,bd=0,bg='yellow')
             button.image = img
             button.grid(row=r,column=c)
             button.bind('<Button-1>',self.SelectCardPlayer)
             
-            button = tk.Button(self.BLUE, image=img,width=w,height=h,bd=0,)
+            button = tk.Button(master=self.BLUE, image=img,width=w,height=h,bd=0,bg = 'blue')
             button.image = img
             button.grid(row=r,column=c)
             button.bind('<Button-1>',self.SelectCardPlayer)
@@ -234,26 +241,68 @@ class Example:
         # self.delete_red.grid   (column=0, row=r+1, columnspan=2)
         # self.delete_green.grid (column=0, row=r+1, columnspan=2)
         # self.delete_yellow.grid(column=0, row=r+1, columnspan=2)
+        self.Redraw(self.listRed)
         self.delete_all.grid  (column=0, row=0, columnspan=1)
+
+    def AddCard(self,e):
+        w = e.widget
+        if w["state"] == "normal":
+    # try:  
+            if self.curButt['bg']=='red':
+                w["state"] = "disabled"
+                self.listOfDisabled.append(w["text"])
+                # img = w.image
+                # print(img)
+                wid =25
+                h = 35
+                # img = ImageTk.getimage( imgTk )
+                img = Image.open( w['text'])
+                img = img.resize((wid,h))
+                # img.save("123")
+                img = ImageTk.PhotoImage(img)
+
+                button = tk.Button(self.RED,width=wid,height=h,bd=0,image = img, bg='red')
+                button.image = img
+
+                button.bind('<Button-1>',self.SelectCardPlayer)
                 
+                self.listRed.append(button)
+                print(self.listRed)
+                self.Redraw(self.listRed)
+    # except:
+        print("somthing wrong")
+
+
+    def Redraw(self, listColor):
+        n=0
+        for card in listColor:
+            r = n//2+1
+            c = n%2
+            card.grid(row=r,column=c)
+            n+=1
+        r = n//2+1
+        c = n%2
+        listColor[0].grid(row=r,column=c)
+        listColor[0].grid(row=1,column=0)
+        pass
+    
     def SelectCardPlayer(self,e):
         # print(123)
         w = e.widget
         self.curButt = w
+
+        # print(w.keys())
+        # print(w["bg"])
         # print(w["state"])
         if w["state"] == "normal":
             w["state"] = "disabled"
         else:
             w["state"] = "normal"
-        # if "disabled" not in w.state():
-        #     w.state(["disabled"])
-        #     num=0
-            # print(active_list.) 
-
-            # active_list.insert(END,w["text"])
-            # sort_list(active_list)
-            # pass
+        # print(self.RED.grid_slaves())
+        
         
     def DeleteCard(self):
+        self.listRed.remove(self.curButt)
         self.curButt.destroy()
+        self.Redraw(self.listRed)
 okno = Example()
