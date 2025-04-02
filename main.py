@@ -7,6 +7,8 @@ from PIL import ImageTk, Image
 class Example:
     def __init__(self):
 
+        self.curButt = ""
+
         file = open('AddList.json')
         listOfAddons = json.load(file)
         file.close()
@@ -56,22 +58,36 @@ class Example:
         
 
         # Menu Colors
+        
+
         self.RED = tk.Frame(self.menu_left_color, bg="red", borderwidth=2)
-        self.RED.grid(column=0,row=0)
+        self.RED.grid(column=0,row=1)
 
         self.GREEN = tk.Frame(self.menu_left_color, bg="green",borderwidth=2)
-        self.GREEN.grid(column=1,row=0)
-
+        self.GREEN.grid(column=1,row=1)
+ 
         self.YELLOW = tk.Frame(self.menu_left_color, bg="yellow",borderwidth=2)
-        self.YELLOW.grid(column=2,row=0)
+        self.YELLOW.grid(column=2,row=1)
 
         self.BLUE = tk.Frame(self.menu_left_color, bg="blue",borderwidth=2)
-        self.BLUE.grid(column=3,row=0)
+        self.BLUE.grid(column=3,row=1)
 
-        self.delete_red = tk.Button(self.RED,text = "Delete",)
-        self.delete_green = tk.Button(self.GREEN,text = "Delete")
-        self.delete_yellow = tk.Button(self.YELLOW,text = "Delete")
-        self.delete_blue = tk.Button(self.BLUE,text = "Delete")
+        self.radioRed = tk.Radiobutton(self.RED,bg="red")
+        self.radioRed.grid(column=0,row=0,columnspan=2)
+
+        self.radioGreen = tk.Radiobutton(self.GREEN,bg="green")
+        self.radioGreen.grid(column=0,row=0,columnspan=2)
+
+        self.radioYellow = tk.Radiobutton(self.YELLOW,bg="yellow")
+        self.radioYellow.grid(column=0,row=0,columnspan=2)
+        
+        self.radioBlue = tk.Radiobutton(self.BLUE,bg="blue")
+        self.radioBlue.grid(column=0,row=0,columnspan=2)
+        
+        # self.delete_red = tk.Button(self.RED,text = "Delete", command=self.DeleteCard)
+        # self.delete_green = tk.Button(self.GREEN,text = "Delete", command=self.DeleteCard)
+        # self.delete_yellow = tk.Button(self.YELLOW,text = "Delete", command=self.DeleteCard)
+        self.delete_all = tk.Button(self.menu_left_Delete,text = "Delete", command=self.DeleteCard)
 
         
 
@@ -177,7 +193,6 @@ class Example:
                 col+=1
 
     def StartCards(self):
-        print(123123)
         directory = ".\Images\\S\\"
         files = []
         files += os.listdir(directory)
@@ -192,36 +207,39 @@ class Example:
             img = Image.open(img_dir)
             img = img.resize((w,h))
             img = ImageTk.PhotoImage(img)
-            r = n//2
+            r = n//2+1
             c = n%2
             button = tk.Button(self.RED, image=img,width=w,height=h,bd=0)
             button.image = img
             button.grid(row=r,column=c)
+            button.bind('<Button-1>',self.SelectCardPlayer)
 
             button = tk.Button(self.GREEN, image=img,width=w,height=h,bd=0)
             button.image = img
             button.grid(row=r,column=c)
+            button.bind('<Button-1>',self.SelectCardPlayer)
 
             button = tk.Button(self.YELLOW, image=img,width=w,height=h,bd=0)
             button.image = img
             button.grid(row=r,column=c)
+            button.bind('<Button-1>',self.SelectCardPlayer)
             
             button = tk.Button(self.BLUE, image=img,width=w,height=h,bd=0,)
             button.image = img
             button.grid(row=r,column=c)
-            
             button.bind('<Button-1>',self.SelectCardPlayer)
             
             n+=1
 
-        self.delete_red.grid   (column=0, row=r+1, columnspan=2)
-        self.delete_green.grid (column=0, row=r+1, columnspan=2)
-        self.delete_yellow.grid(column=0, row=r+1, columnspan=2)
-        self.delete_blue.grid  (column=0, row=r+1, columnspan=2)
+        # self.delete_red.grid   (column=0, row=r+1, columnspan=2)
+        # self.delete_green.grid (column=0, row=r+1, columnspan=2)
+        # self.delete_yellow.grid(column=0, row=r+1, columnspan=2)
+        self.delete_all.grid  (column=0, row=0, columnspan=1)
                 
     def SelectCardPlayer(self,e):
         # print(123)
         w = e.widget
+        self.curButt = w
         # print(w["state"])
         if w["state"] == "normal":
             w["state"] = "disabled"
@@ -236,4 +254,6 @@ class Example:
             # sort_list(active_list)
             # pass
         
+    def DeleteCard(self):
+        self.curButt.destroy()
 okno = Example()
