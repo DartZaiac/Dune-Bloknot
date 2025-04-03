@@ -146,7 +146,7 @@ class Example:
 
         # Добавляем все пути до картинок в список картинок по ценам
         for f in files:
-            if f[0]==self.Addon.get():
+            # if f[0]==self.Addon.get():
                 self.listOfButtons[str(f[1])].append(str(f))
                 
         # Список самих кнопок
