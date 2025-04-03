@@ -120,6 +120,11 @@ class Example:
         self.SmenaAddona()
 
         # Запускаем аддон
+        # !!!!!!!!!!!!!!!!!!!
+        # self.root.call('wm', 'attributes', '.', '-topmost', '1') 
+        # self.root.call('wm', 'attributes', '.', '-topmost', False)
+
+        
         self.root.mainloop()
 
     def SmenaAddona(self):
