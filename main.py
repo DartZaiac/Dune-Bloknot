@@ -79,17 +79,17 @@ class Example:
         self.BLUE = tk.Frame(self.menu_left_color, bg="blue",borderwidth=2)
         self.BLUE.grid(column=3,row=1)
 
-        self.radioRed = tk.Radiobutton(self.RED,bg="red")
-        self.radioRed.grid(column=0,row=0,columnspan=2)
+        # self.radioRed = tk.Radiobutton(self.RED,bg="red")
+        # self.radioRed.grid(column=0,row=0,columnspan=2)
 
-        self.radioGreen = tk.Radiobutton(self.GREEN,bg="green")
-        self.radioGreen.grid(column=0,row=0,columnspan=2)
+        # self.radioGreen = tk.Radiobutton(self.GREEN,bg="green")
+        # self.radioGreen.grid(column=0,row=0,columnspan=2)
 
-        self.radioYellow = tk.Radiobutton(self.YELLOW,bg="yellow")
-        self.radioYellow.grid(column=0,row=0,columnspan=2)
+        # self.radioYellow = tk.Radiobutton(self.YELLOW,bg="yellow")
+        # self.radioYellow.grid(column=0,row=0,columnspan=2)
         
-        self.radioBlue = tk.Radiobutton(self.BLUE,bg="blue")
-        self.radioBlue.grid(column=0,row=0,columnspan=2)
+        # self.radioBlue = tk.Radiobutton(self.BLUE,bg="blue")
+        # self.radioBlue.grid(column=0,row=0,columnspan=2)
         
         # self.delete_red = tk.Button(self.RED,text = "Delete", command=self.DeleteCard)
         # self.delete_green = tk.Button(self.GREEN,text = "Delete", command=self.DeleteCard)
