@@ -93,7 +93,7 @@ class Example:
         self.righе_Imperium_Cards = tk.Frame(self.right, )
 
         # Область с Сёстрами/Червём/Свёрнутым пространством TODO доделать!
-        self.right_down_worm = tk.Frame(self.right, bg="red")
+        self.right_down_worm = tk.Frame(self.right, )
 
         # Стартуем с Дюны Империи
         self.Addon = StringVar(value="I")
@@ -112,7 +112,7 @@ class Example:
         self.right.grid(row=0, column=1, sticky="ew")
         self.right_Addons.grid(row=0,column=0)
         self.righе_Imperium_Cards.grid(row=1,column=0)
-        self.right_down_worm.grid(row=2,column=0)
+        self.right_down_worm.grid(row=2,column=0,sticky="ew")
         
 
         self.SizeMode  = StringVar(value="72x100")
@@ -131,6 +131,36 @@ class Example:
         self.menu_size_radio37.grid(column=4,row=0)
         self.menu_size_radio35.grid(column=5,row=0)
 
+        self.LabelArrakin = tk.Label(self.right_down_worm,text="8")
+        self.LabelFold = tk.Label(self.right_down_worm,text = "6")
+        self.LabelSMF = tk.Label(self.right_down_worm,text = "10")
+        
+        self.LabelArrakin.grid(row=0,column=0,ipadx=0,ipady=0,padx=0,pady=0)
+        self.LabelFold.grid(row=0,column=2,ipadx=0,ipady=0,padx=0,pady=0)
+        self.LabelSMF.grid(row=0,column=4,ipadx=0,ipady=0,padx=0,pady=0)
+
+
+        img = Image.open(".\Images\W\Arrakin.png")
+        img = img.resize((self.wid,self.hey))
+        img = ImageTk.PhotoImage(img)
+        self.CardArrakin = tk.Button(self.right_down_worm,width=self.wid,height=self.hey,bd=0,image = img)
+        self.CardArrakin.image = img
+        self.CardArrakin.grid(column=1,row=0)
+
+        img = Image.open("./Images/W/Fold.png")
+        img = img.resize((self.wid,self.hey))
+        img = ImageTk.PhotoImage(img)
+        self.CardFold = tk.Button(self.right_down_worm,width=self.wid,height=self.hey,bd=0,image = img)
+        self.CardFold.image = img
+        self.CardFold.grid(column=3,row=0)
+
+        img = Image.open("./Images/W/Worm.png")
+        img = img.resize((self.wid,self.hey))
+        img = ImageTk.PhotoImage(img)
+        self.CardSMF = tk.Button(self.right_down_worm,width=self.wid,height=self.hey,bd=0,image = img)
+        self.CardSMF.image = img
+        self.CardSMF.grid(column=5,row=0)
+
         self.root.grid_rowconfigure(1, weight=1)
         self.root.grid_columnconfigure(1, weight=1)
         self.listOfButtonsButt = []
@@ -148,11 +178,6 @@ class Example:
         self.root.mainloop()
     def ChangeSize(self):
         self.listOfDisabled = []
-# "58x80"
-# "51x70"
-# "44x60"
-# "37x50"
-# "35x49"
         if self.SizeMode.get() == "72x100":
             self.wid=72
             self.hey=100
@@ -357,23 +382,22 @@ class Example:
         w = e.widget
         # wid =25
         # h = 35
-        wid = self.wid
-        h = self.hey
         
         img = Image.open( w['text'])
-        img.resize((self.wid,self.hey))
+        img = img.resize((self.wid, self.hey))
         img = ImageTk.PhotoImage(img)
         # Если карта-кнопка доступна
         if w["state"] == "normal":
             try:  
                 # Если последняя кнопка карта использованая на игроке - это красная 
                 if self.curButt['bg']=='red':
+                    print(123)
                     # Деактивируем кнопку
                     w["state"] = "disabled"
                     # Добавляем карту в список неактивных
                     self.listOfDisabled.append(w["text"])
                     # Добавляем кнопку 
-                    button = tk.Button(self.RED,width=wid,height=h,bd=0,image = img, bg='red')
+                    button = tk.Button(self.RED,width=self.wid,height=self.hey,bd=0,image = img, bg='red')
                     button.image = img
                     button.bind('<Button-1>',self.SelectCardPlayer)
                     self.listRed.append(button)
@@ -382,7 +406,7 @@ class Example:
                 elif self.curButt['bg']=='green':
                     w["state"] = "disabled"
                     self.listOfDisabled.append(w["text"])
-                    button = tk.Button(self.GREEN,width=wid,height=h,bd=0,image = img, bg='green')
+                    button = tk.Button(self.GREEN,width=self.wid,height=self.hey,bd=0,image = img, bg='green')
                     button.image = img
                     button.bind('<Button-1>',self.SelectCardPlayer)
                     self.listGreen.append(button)
@@ -390,7 +414,7 @@ class Example:
                 elif self.curButt['bg']=='yellow':
                     w["state"] = "disabled"
                     self.listOfDisabled.append(w["text"])
-                    button = tk.Button(self.YELLOW,width=wid,height=h,bd=0,image = img, bg='yellow')
+                    button = tk.Button(self.YELLOW,width=self.wid,height=self.hey,bd=0,image = img, bg='yellow')
                     button.image = img
                     button.bind('<Button-1>', self.SelectCardPlayer)
                     self.listYellow.append(button)
@@ -398,7 +422,7 @@ class Example:
                 elif self.curButt['bg']=='blue':
                     w["state"] = "disabled"
                     self.listOfDisabled.append(w["text"])
-                    button = tk.Button(self.BLUE,width=wid,height=h,bd=0,image = img, bg='blue')
+                    button = tk.Button(self.BLUE,width=self.wid,height=self.hey,bd=0,image = img, bg='blue')
                     button.image = img
                     button.bind('<Button-1>',self.SelectCardPlayer)
                     self.listBlue.append(button)
@@ -406,7 +430,7 @@ class Example:
                 elif self.curButt['bg']=='teal':
                     w["state"] = "disabled"
                     self.listOfDisabled.append(w["text"])
-                    button = tk.Button(self.MUAD,width=wid,height=h,bd=0,image = img, bg='teal')
+                    button = tk.Button(self.MUAD,width=self.wid,height=self.hey,bd=0,image = img, bg='teal')
                     button.image = img
                     button.bind('<Button-1>',self.SelectCardPlayer)
                     self.listMuad.append(button)
@@ -414,7 +438,7 @@ class Example:
                 elif self.curButt['bg']=='white':
                     w["state"] = "disabled"
                     self.listOfDisabled.append(w["text"])
-                    button = tk.Button(self.EMPEROR,width=wid,height=h,bd=0,image = img, bg='white')
+                    button = tk.Button(self.EMPEROR,width=self.wid,height=self.hey,bd=0,image = img, bg='white')
                     button.image = img
                     button.bind('<Button-1>',self.SelectCardPlayer)
                     self.listEmperor.append(button)
