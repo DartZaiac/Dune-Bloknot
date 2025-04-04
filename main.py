@@ -17,6 +17,9 @@ class Example:
         self.listYellow = []
         self.listGreen = []
 
+        self.wid = 72
+        self.hey = 100
+
         # Список отключённых карт из империума
         self.listOfDisabled = []
 
@@ -37,20 +40,20 @@ class Example:
         self.menu_left_upper = tk.Frame(self.menu_left,   )
         # Поле для 4 полей колод игроков
         self.menu_left_color = tk.Frame(self.menu_left,  )
-        # self.menu_left_cards = tk.Frame(self.menu_left,  bg="orange")
+
         # Поле для кнопки удаления
         self.menu_left_Delete = tk.Frame(self.menu_left,  bg="blue")
+
+        # поле размеров
+        self.menu_size = tk.Frame(self.root)
         
-        # Размещаем девые поля
+        # Размещаем левые поля
         self.menu_left_upper.grid(column=0,row=0)
         self.menu_left_color.grid(column=0,row=1)
         self.menu_left_Delete.grid(column=0,row=2)
+        
 
-        # self.menu_left_upper.pack(side="top", fill="both", expand=True)
-        # self.menu_left_lower.pack(side="top", fill="both", expand=True)
-
-        # Добавляем кружки выбора количества игроков TODO: сделать для 6 игроков
-
+        # Добавляем кружки выбора количества игроков
         self.AlwaysOnTop = IntVar(value=1)
         self.mode  = StringVar(value="play4") 
         self.play4 = tk.Radiobutton(self.menu_left_upper, text="4 игрока",  value="play4", variable=self.mode, command=self.ModeRadio)
@@ -87,7 +90,7 @@ class Example:
         # Строка с аддонами
         self.right_Addons = tk.Frame(self.right, bg="#dfdfdf")
         # Область с картами Империума
-        self.righе_Imperium_Cards = tk.Frame(self.right, bg="blue")
+        self.righе_Imperium_Cards = tk.Frame(self.right, )
 
         # Область с Сёстрами/Червём/Свёрнутым пространством TODO доделать!
         self.right_down_worm = tk.Frame(self.right, bg="red")
@@ -105,11 +108,28 @@ class Example:
 
         # Размещаем панели
         self.menu_left.grid(row=0, column=0, rowspan=2, sticky="nsew")
+        self.menu_size.grid(row=2,column=0,columnspan=2)
         self.right.grid(row=0, column=1, sticky="ew")
         self.right_Addons.grid(row=0,column=0)
         self.righе_Imperium_Cards.grid(row=1,column=0)
         self.right_down_worm.grid(row=2,column=0)
         
+
+        self.SizeMode  = StringVar(value="72x100")
+
+        self.menu_size_radio72 = tk.Radiobutton(self.menu_size, text="72x100", value="72x100", variable=self.SizeMode, command=self.ChangeSize)
+        self.menu_size_radio58 = tk.Radiobutton(self.menu_size, text="58x80" ,value="58x80", variable=self.SizeMode, command=self.ChangeSize)
+        self.menu_size_radio51 = tk.Radiobutton(self.menu_size, text="51x70" ,value="51x70", variable=self.SizeMode, command=self.ChangeSize)
+        self.menu_size_radio44 = tk.Radiobutton(self.menu_size, text="44x60" ,value="44x60", variable=self.SizeMode, command=self.ChangeSize)
+        self.menu_size_radio37 = tk.Radiobutton(self.menu_size, text="37x50" ,value="37x50", variable=self.SizeMode, command=self.ChangeSize)
+        self.menu_size_radio35 = tk.Radiobutton(self.menu_size, text="35x49" ,value="35x49", variable=self.SizeMode, command=self.ChangeSize)
+
+        self.menu_size_radio72.grid(column=0,row=0)
+        self.menu_size_radio58.grid(column=1,row=0)
+        self.menu_size_radio51.grid(column=2,row=0)
+        self.menu_size_radio44.grid(column=3,row=0)
+        self.menu_size_radio37.grid(column=4,row=0)
+        self.menu_size_radio35.grid(column=5,row=0)
 
         self.root.grid_rowconfigure(1, weight=1)
         self.root.grid_columnconfigure(1, weight=1)
@@ -126,14 +146,34 @@ class Example:
         self.root.call('wm', 'attributes', '.', '-topmost', '1') 
         
         self.root.mainloop()
-
+    def ChangeSize(self):
+        self.listOfDisabled = []
+# "58x80"
+# "51x70"
+# "44x60"
+# "37x50"
+# "35x49"
+        if self.SizeMode.get() == "72x100":
+            self.wid=72
+            self.hey=100
+        else:
+            self.wid = int(self.SizeMode.get()[0:2])
+            self.hey = int(self.SizeMode.get()[3:])
+        self.SmenaAddona()
+        self.StartCards()
+        # self.Redraw(self.listRed)
+        # self.Redraw(self.listGreen)
+        # self.Redraw(self.listYellow)
+        # self.Redraw(self.listBlue)
+        # self.Redraw(self.listMuad)
+        # self.Redraw(self.listEmperor)
     def ModeRadio(self):
         if self.mode.get() == "play4":
-            self.StartCards(4)
+            self.StartCards()
         else:
-            self.StartCards(6)
+            self.StartCards()
     def AlwaysOnTopFunc(self):
-        if self.AlwaysOnTopCheck.get() == 1:
+        if self.AlwaysOnTop.get() == 1:
             self.root.call('wm', 'attributes', '.', '-topmost', '1') 
         else:
             self.root.call('wm', 'attributes', '.', '-topmost', False)
@@ -172,19 +212,19 @@ class Example:
                 img_dir = directory + but
                 
                 # Размер картинок
-                w = 35
-                h = 49
+                # w = 35
+                # h = 49
 
                 # w=50
                 # h = 70
 
                 img = Image.open(img_dir)
 
-                img = img.resize((w,h))
+                img = img.resize((self.wid,self.hey))
 
                 img = ImageTk.PhotoImage(img)
                 
-                button = tk.Button(self.righе_Imperium_Cards, image=img,width=w,height=h,bd=0,text=img_dir)
+                button = tk.Button(self.righе_Imperium_Cards, image=img,width=self.wid,height=self.hey,bd=0,text=img_dir)
                 button.image = img
                 self.listOfButtonsButt.append(button)
                 # Помечаем карты, что отмечены отключением как отключённые
@@ -196,7 +236,7 @@ class Example:
                 col+=1
 
     # Раздача игрокам стартовых карт
-    def StartCards(self, mode=4):
+    def StartCards(self):
         for card in self.listGreen:
             card.destroy()
         for card in self.listRed:
@@ -227,32 +267,32 @@ class Example:
         for f in files:
             img_dir = directory + f
             
-            w=25
-            h = 35
+            # w=25
+            # h = 35
             
             img = Image.open(img_dir)
-            img = img.resize((w,h))
+            img = img.resize((self.wid,self.hey))
             img = ImageTk.PhotoImage(img)
             
             # r = n//2+1
             # c = n%2
             
-            button = tk.Button(self.RED, image=img,width=w,height=h,bd=0,bg='red')
+            button = tk.Button(self.RED, image=img,width=self.wid,height=self.hey,bd=0,bg='red')
             button.image = img
             button.bind('<Button-1>',self.SelectCardPlayer)
             self.listRed.append(button)
 
-            button = tk.Button(self.GREEN, image=img,width=w,height=h,bd=0,bg = 'green')
+            button = tk.Button(self.GREEN, image=img,width=self.wid,height=self.hey,bd=0,bg = 'green')
             button.image = img
             button.bind('<Button-1>',self.SelectCardPlayer)
             self.listGreen.append(button)
 
-            button = tk.Button(self.YELLOW, image=img,width=w,height=h,bd=0,bg='yellow')
+            button = tk.Button(self.YELLOW, image=img,width=self.wid,height=self.hey,bd=0,bg='yellow')
             button.image = img
             button.bind('<Button-1>',self.SelectCardPlayer)
             self.listYellow.append(button)
             
-            button = tk.Button(master=self.BLUE, image=img,width=w,height=h,bd=0,bg = 'blue')
+            button = tk.Button(master=self.BLUE, image=img,width=self.wid,height=self.hey,bd=0,bg = 'blue')
             button.image = img
             button.bind('<Button-1>',self.SelectCardPlayer)
             self.listBlue.append(button)
@@ -269,21 +309,21 @@ class Example:
         # Отрисовка кнопки удаления
         self.delete_all.grid  (column=0, row=0, columnspan=1)
 
-        if mode==6:
+        if self.mode.get() == "play6":
             directoryE = ".\Images\\E\\"
             files = []
             files += os.listdir(directoryE)
             n=0
             for f in files:
                 img_dir = directoryE + f
-                w=25
-                h = 35
+                # w=25
+                # h = 35
                 
                 img = Image.open(img_dir)
-                img = img.resize((w,h))
+                img = img.resize((self.wid, self.hey))
                 img = ImageTk.PhotoImage(img)
                 
-                button = tk.Button(self.EMPEROR, image=img,width=w,height=h,bd=0,bg='white')
+                button = tk.Button(self.EMPEROR, image=img, width=self.wid, height=self.hey, bd=0, bg = 'white')
                 button.image = img
                 button.bind('<Button-1>',self.SelectCardPlayer)
                 self.listEmperor.append(button)
@@ -295,14 +335,14 @@ class Example:
             for f in files:
                 img_dir = directoryM + f
                 
-                w=25
-                h = 35
+                # w=25
+                # h = 35
                 
                 img = Image.open(img_dir)
-                img = img.resize((w,h))
+                img = img.resize((self.wid, self.hey))
                 img = ImageTk.PhotoImage(img)
                 
-                button = tk.Button(self.MUAD, image=img,width=w,height=h,bd=0,bg='teal')
+                button = tk.Button(self.MUAD, image=img,width=self.wid,height=self.hey,bd=0,bg='teal')
                 button.image = img
                 button.bind('<Button-1>',self.SelectCardPlayer)
                 self.listMuad.append(button)
@@ -315,10 +355,13 @@ class Example:
     def AddCard(self,e):
         # Заранее перерисовываем карту
         w = e.widget
-        wid =25
-        h = 35
+        # wid =25
+        # h = 35
+        wid = self.wid
+        h = self.hey
+        
         img = Image.open( w['text'])
-        img = img.resize((wid,h))
+        img.resize((self.wid,self.hey))
         img = ImageTk.PhotoImage(img)
         # Если карта-кнопка доступна
         if w["state"] == "normal":
@@ -421,4 +464,12 @@ class Example:
             self.listBlue.remove(self.curButt)
             self.curButt.destroy()
             self.Redraw(self.listBlue)
+        elif self.curButt['bg']=='white':
+            self.listEmperor.remove(self.curButt)
+            self.curButt.destroy()
+            self.Redraw(self.listEmperor)
+        elif self.curButt['bg']=='teal':
+            self.listMuad.remove(self.curButt)
+            self.curButt.destroy()
+            self.Redraw(self.listMuad)
 okno = Example()
