@@ -10,6 +10,8 @@ class Example:
         self.curButt = ""
 
         # Списки карт каждого игрока
+        self.listEmperor = []
+        self.listMuad = []
         self.listRed=[]
         self.listBlue = []
         self.listYellow = []
@@ -22,28 +24,17 @@ class Example:
         file = open('AddList.json')
         listOfAddons = json.load(file)
         file.close()
-        
-
-        # directory = ".\Images"
-        # # Создаем пустой список
-        # files = []
-
-        # # Добавляем файлы в список
-        # files += os.listdir(directory)
-
-
-        # self.columsPlayers = 3
-
-        # wid = 4 * self.columsPlayers * 25
 
         # Создаём окно
         self.root = tk.Tk()
         self.root.title("Dune Imperium Блокнот")
 
+
+
         # menu left
         self.menu_left = tk.Frame(self.root, bg="#f0f0f0")
         # Поле для режима игроков (4 или 6)
-        self.menu_left_upper = tk.Frame(self.menu_left,   bg="red",)
+        self.menu_left_upper = tk.Frame(self.menu_left,   )
         # Поле для 4 полей колод игроков
         self.menu_left_color = tk.Frame(self.menu_left,  )
         # self.menu_left_cards = tk.Frame(self.menu_left,  bg="orange")
@@ -59,24 +50,34 @@ class Example:
         # self.menu_left_lower.pack(side="top", fill="both", expand=True)
 
         # Добавляем кружки выбора количества игроков TODO: сделать для 6 игроков
+
+        self.AlwaysOnTop = IntVar(value=1)
         self.mode  = StringVar(value="play4") 
-        self.play4 = tk.Radiobutton(self.menu_left_upper, text="4 игрока",  value="play4", variable=self.mode)
-        self.play6 = tk.Radiobutton(self.menu_left_upper, text="6 игроков", value="play6", variable=self.mode)
-        self.play4.grid(row = 0, column = 0)
-        self.play6.grid(row = 0, column = 1)
+        self.play4 = tk.Radiobutton(self.menu_left_upper, text="4 игрока",  value="play4", variable=self.mode, command=self.ModeRadio)
+        self.play6 = tk.Radiobutton(self.menu_left_upper, text="6 игроков", value="play6", variable=self.mode, command=self.ModeRadio)
+        self.AlwaysOnTopCheck = tk.Checkbutton(self.menu_left_upper, text = "Alwats on Top",variable=self.AlwaysOnTop,command=self.AlwaysOnTopFunc)
+        self.play4.grid(row = 1, column = 0)
+        self.play6.grid(row = 1, column = 1)
+        self.AlwaysOnTopCheck.grid(column=0,row=0,columnspan=2)
 
         # Menu Colors. Поля цветов игроков       
         self.RED = tk.Frame(self.menu_left_color, bg="red", borderwidth=2)
         self.RED.grid(column=0,row=1)
 
+        self.EMPEROR = tk.Frame(self.menu_left_color, bg="white", borderwidth=2)
+        self.EMPEROR.grid(column=1,row=1)
+
         self.GREEN = tk.Frame(self.menu_left_color, bg="green",borderwidth=2)
-        self.GREEN.grid(column=1,row=1)
+        self.GREEN.grid(column=2,row=1)
  
         self.YELLOW = tk.Frame(self.menu_left_color, bg="yellow",borderwidth=2)
-        self.YELLOW.grid(column=2,row=1)
+        self.YELLOW.grid(column=3,row=1)
+
+        self.MUAD = tk.Frame(self.menu_left_color, bg="teal", borderwidth=2)
+        self.MUAD.grid(column=4,row=1)
 
         self.BLUE = tk.Frame(self.menu_left_color, bg="blue",borderwidth=2)
-        self.BLUE.grid(column=3,row=1)
+        self.BLUE.grid(column=5,row=1)
 
         # Кнопка удаления выбраной кнопки
         self.delete_all = tk.Button(self.menu_left_Delete,text = "Delete", command=self.DeleteCard)
@@ -117,16 +118,25 @@ class Example:
         # Подготавливаем стартовые карты
         self.StartCards()
         # Рисуем Империум
+
         self.SmenaAddona()
 
         # Запускаем аддон
         # !!!!!!!!!!!!!!!!!!!
-        # self.root.call('wm', 'attributes', '.', '-topmost', '1') 
-        # self.root.call('wm', 'attributes', '.', '-topmost', False)
-
+        self.root.call('wm', 'attributes', '.', '-topmost', '1') 
         
         self.root.mainloop()
 
+    def ModeRadio(self):
+        if self.mode.get() == "play4":
+            self.StartCards(4)
+        else:
+            self.StartCards(6)
+    def AlwaysOnTopFunc(self):
+        if self.AlwaysOnTopCheck.get() == 1:
+            self.root.call('wm', 'attributes', '.', '-topmost', '1') 
+        else:
+            self.root.call('wm', 'attributes', '.', '-topmost', False)
     def SmenaAddona(self):
         # Убираем ВСЕ кнопки Империума
         for button in self.listOfButtonsButt:
@@ -186,7 +196,29 @@ class Example:
                 col+=1
 
     # Раздача игрокам стартовых карт
-    def StartCards(self):
+    def StartCards(self, mode=4):
+        for card in self.listGreen:
+            card.destroy()
+        for card in self.listRed:
+            card.destroy()
+        for card in self.listYellow:
+            card.destroy()
+        for card in self.listBlue:
+            card.destroy()
+        for card in self.listMuad:
+            card.destroy()
+        for card in self.listEmperor:
+            card.destroy()
+        self.listGreen = []
+        self.listYellow = []
+        self.listRed=[]
+        self.listBlue = []
+        self.listMuad = []
+        self.listEmperor = []
+
+        self.EMPEROR["width"]=1
+        self.MUAD["width"]=1
+
         directory = ".\Images\\S\\"
         files = []
         files += os.listdir(directory)
@@ -202,8 +234,8 @@ class Example:
             img = img.resize((w,h))
             img = ImageTk.PhotoImage(img)
             
-            r = n//2+1
-            c = n%2
+            # r = n//2+1
+            # c = n%2
             
             button = tk.Button(self.RED, image=img,width=w,height=h,bd=0,bg='red')
             button.image = img
@@ -236,6 +268,48 @@ class Example:
         self.Redraw(self.listBlue)
         # Отрисовка кнопки удаления
         self.delete_all.grid  (column=0, row=0, columnspan=1)
+
+        if mode==6:
+            directoryE = ".\Images\\E\\"
+            files = []
+            files += os.listdir(directoryE)
+            n=0
+            for f in files:
+                img_dir = directoryE + f
+                w=25
+                h = 35
+                
+                img = Image.open(img_dir)
+                img = img.resize((w,h))
+                img = ImageTk.PhotoImage(img)
+                
+                button = tk.Button(self.EMPEROR, image=img,width=w,height=h,bd=0,bg='white')
+                button.image = img
+                button.bind('<Button-1>',self.SelectCardPlayer)
+                self.listEmperor.append(button)
+
+            directoryM = ".\Images\\M\\"
+            files = []
+            files += os.listdir(directoryM)
+            n=0
+            for f in files:
+                img_dir = directoryM + f
+                
+                w=25
+                h = 35
+                
+                img = Image.open(img_dir)
+                img = img.resize((w,h))
+                img = ImageTk.PhotoImage(img)
+                
+                button = tk.Button(self.MUAD, image=img,width=w,height=h,bd=0,bg='teal')
+                button.image = img
+                button.bind('<Button-1>',self.SelectCardPlayer)
+                self.listMuad.append(button)
+            self.Redraw(self.listEmperor)
+            self.Redraw(self.listMuad)
+        
+
 
     # Добавление карт из империума
     def AddCard(self,e):
@@ -286,6 +360,22 @@ class Example:
                     button.bind('<Button-1>',self.SelectCardPlayer)
                     self.listBlue.append(button)
                     self.Redraw(self.listBlue)
+                elif self.curButt['bg']=='teal':
+                    w["state"] = "disabled"
+                    self.listOfDisabled.append(w["text"])
+                    button = tk.Button(self.MUAD,width=wid,height=h,bd=0,image = img, bg='teal')
+                    button.image = img
+                    button.bind('<Button-1>',self.SelectCardPlayer)
+                    self.listMuad.append(button)
+                    self.Redraw(self.listMuad)
+                elif self.curButt['bg']=='white':
+                    w["state"] = "disabled"
+                    self.listOfDisabled.append(w["text"])
+                    button = tk.Button(self.EMPEROR,width=wid,height=h,bd=0,image = img, bg='white')
+                    button.image = img
+                    button.bind('<Button-1>',self.SelectCardPlayer)
+                    self.listEmperor.append(button)
+                    self.Redraw(self.listEmperor)
             except:
                 print("somthing wrong")
                 
@@ -308,7 +398,6 @@ class Example:
     def SelectCardPlayer(self,e):
         w = e.widget
         self.curButt = w
-
         if w["state"] == "normal":
             w["state"] = "disabled"
         else:
