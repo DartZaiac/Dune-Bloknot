@@ -3,6 +3,7 @@ from tkinter import *
 import json
 import os
 from PIL import ImageTk, Image
+from tkinter.messagebox import showinfo, askyesno
 
 class Example:
     def __init__(self):
@@ -24,6 +25,9 @@ class Example:
         file = open('AddList.json')
         listOfAddons = json.load(file)
         file.close()
+
+        # Спрашиваем про 11ю карту
+        self.click()
 
         # Создаём окно
         self.root = tk.Tk()
@@ -54,8 +58,8 @@ class Example:
         self.AlwaysOnTop = IntVar(value=1)
         self.Krasit = IntVar(value=0)
         self.mode  = StringVar(value="play4") 
-        self.play4 = tk.Radiobutton(self.menu_left_upper, text="4 игрока",  value="play4", variable=self.mode, command=self.ModeRadio)
-        self.play6 = tk.Radiobutton(self.menu_left_upper, text="6 игроков", value="play6", variable=self.mode, command=self.ModeRadio)
+        self.play4 = tk.Radiobutton(self.menu_left_upper, text="4 players",  value="play4", variable=self.mode, command=self.ModeRadio)
+        self.play6 = tk.Radiobutton(self.menu_left_upper, text="6 players", value="play6", variable=self.mode, command=self.ModeRadio)
         self.AlwaysOnTopCheck = tk.Checkbutton(self.menu_left_upper, text = "Alwats on Top",variable=self.AlwaysOnTop,command=self.AlwaysOnTopFunc)
         self.Pokras = tk.Checkbutton(self.menu_left_upper, text = "Красить карты?",variable=self.Krasit,)
         self.play4.grid(row = 1, column = 0)
@@ -166,6 +170,11 @@ class Example:
         self.Saving()
         self.root.mainloop()
 
+    def click(self): 
+        result =  askyesno(title="Is it Epic mode?", message="Do you want add \"Control the Spice\" in players decks?")
+        if result: self.Epic=True
+        else: self.Epic=False
+
     def Saving(self):
         self.listSAVE.append((
                 self.listRed[:],
@@ -234,6 +243,7 @@ class Example:
                 # self.Saving()
                 self.LabelSMF["text"] = str(int(self.LabelSMF["text"])-1)
                 self.CardSMF["state"]="normal"
+    
     def ChangeSize(self):
         self.Saving()
         # self.Saving()
@@ -244,22 +254,14 @@ class Example:
         else:
             self.wid = int(self.SizeMode.get()[0:2])
             self.hey = int(self.SizeMode.get()[3:])
-        # self.SmenaAddona()
-        # self.StartCards()
         self.Loading()
-        # self.Redraw(self.listRed)
-        # self.Redraw(self.listGreen)
-        # self.Redraw(self.listYellow)
-        # self.Redraw(self.listBlue)
-        # self.Redraw(self.listMuad)
-        # self.Redraw(self.listEmperor)
+
     def ModeRadio(self):
         if self.mode.get() == "play4":
             self.StartCards()
         else:
             self.StartCards()
-    # def KrasitFunc(self):
-    #     if self.Krasit.get() == 1:
+
     def AlwaysOnTopFunc(self):
         if self.AlwaysOnTop.get() == 1:
             self.root.call('wm', 'attributes', '.', '-topmost', '1') 
@@ -381,6 +383,8 @@ class Example:
         
         for f in files:
             img_dir = directory + f
+            if "Epic" in img_dir and not self.Epic:
+                continue
             img = Image.open(img_dir)
             if "zGran" not in img_dir:
                 img = img.resize((self.wid,self.hey))
