@@ -52,7 +52,7 @@ class Example:
 
         # Добавляем кружки выбора количества игроков
         self.AlwaysOnTop = IntVar(value=1)
-        self.Krasit = IntVar(value=1)
+        self.Krasit = IntVar(value=0)
         self.mode  = StringVar(value="play4") 
         self.play4 = tk.Radiobutton(self.menu_left_upper, text="4 игрока",  value="play4", variable=self.mode, command=self.ModeRadio)
         self.play6 = tk.Radiobutton(self.menu_left_upper, text="6 игроков", value="play6", variable=self.mode, command=self.ModeRadio)
@@ -62,6 +62,7 @@ class Example:
         self.play6.grid(row = 1, column = 1)
         self.AlwaysOnTopCheck.grid(column=0,row=0,columnspan=1)
         self.Pokras.grid(column=1,row=0,columnspan=1)
+
 
         # Menu Colors. Поля цветов игроков       
         self.RED = tk.Frame(self.menu_left_color, bg="red", borderwidth=2)
@@ -148,8 +149,10 @@ class Example:
         self.root.grid_columnconfigure(1, weight=1)
         self.listOfButtonsButt = []
 
-        # self.GranicaRED=tk.Label(self.RED, text="ГРАНИЦА")
         
+        self.LoadButt = tk.Button(self.menu_left_upper, text = "UNDO", command=self.Loading)
+        self.LoadButt.grid(row=0,column=2)
+        self.listSAVE=[]
 
         # Подготавливаем стартовые карты
         self.StartCards()
@@ -160,35 +163,90 @@ class Example:
         # Запускаем аддон
         # !!!!!!!!!!!!!!!!!!!
         self.root.call('wm', 'attributes', '.', '-topmost', '1') 
-        
+        self.Saving()
         self.root.mainloop()
+
+    def Saving(self):
+        self.listSAVE.append((
+                self.listRed[:],
+                self.listGreen[:],
+                self.listYellow[:],
+                self.listBlue[:],
+                self.listEmperor[:],
+                self.listMuad[:],
+                self.listOfDisabled[:],
+                self.LabelArrakin["text"],
+                self.LabelFold["text"],
+                self.LabelSMF["text"],
+            ))
+
+    def Loading(self):
+        if len(self.listSAVE)>1:
+            for pack in self.listBlue:
+                pack.grid_forget()
+            for pack in self.listYellow:
+                pack.grid_forget()
+            for pack in self.listGreen:
+                pack.grid_forget()
+            for pack in self.listRed:
+                pack.grid_forget()
+            for pack in self.listEmperor:
+                pack.grid_forget()
+            for pack in self.listMuad:
+                pack.grid_forget()
+            self.listRed =              self.listSAVE[-1][0][:]
+            self.listGreen =            self.listSAVE[-1][1][:]
+            self.listYellow =           self.listSAVE[-1][2][:]
+            self.listBlue =             self.listSAVE[-1][3][:]
+            self.listEmperor =          self.listSAVE[-1][4][:]
+            self.listMuad =             self.listSAVE[-1][5][:]
+            self.listOfDisabled =       self.listSAVE[-1][6][:]
+            self.LabelArrakin["text"] = self.listSAVE[-1][7][:]
+            self.LabelFold["text"] =    self.listSAVE[-1][8][:]
+            self.LabelSMF["text"] =     self.listSAVE[-1][9][:]
+            self.listSAVE.pop(-1)
+
+            self.SmenaAddona()
+            self.Redraw(self.listRed)
+            self.Redraw(self.listGreen)
+            self.Redraw(self.listYellow)
+            self.Redraw(self.listBlue)
+            if self.mode.get() == "play6":
+                self.Redraw(self.listEmperor)
+                self.Redraw(self.listMuad)
 
     def Arrakin(self):
         if int(self.LabelArrakin["text"])>0:
             if self.AddCard(self.CardArrakin):
+                # self.Saving()
                 self.LabelArrakin["text"] = str(int(self.LabelArrakin["text"])-1)
                 self.CardArrakin["state"]="normal"
 
     def Fold(self):
         if int(self.LabelFold["text"])>0:
             if self.AddCard(self.CardFold):
+                # self.Saving()
                 self.LabelFold["text"] = str(int(self.LabelFold["text"])-1)
                 self.CardFold["state"]="normal"
     def SMF(self):
         if int(self.LabelSMF["text"])>0:
             if self.AddCard(self.CardSMF):
+                # self.Saving()
                 self.LabelSMF["text"] = str(int(self.LabelSMF["text"])-1)
                 self.CardSMF["state"]="normal"
     def ChangeSize(self):
-        self.listOfDisabled = []
+        self.Saving()
+        # self.Saving()
+        # self.listOfDisabled = []
         if self.SizeMode.get() == "72x100":
             self.wid=72
             self.hey=100
         else:
             self.wid = int(self.SizeMode.get()[0:2])
             self.hey = int(self.SizeMode.get()[3:])
-        self.SmenaAddona()
-        self.StartCards()
+        # self.SmenaAddona()
+        # self.StartCards()
+        self.Loading()
         # self.Redraw(self.listRed)
         # self.Redraw(self.listGreen)
         # self.Redraw(self.listYellow)
@@ -348,40 +406,36 @@ class Example:
                 self.listBlue.append(button)
                 
                 n+=1
-            else:
-                height =20
-                img = img.resize((self.wid,self.hey))
-                img = ImageTk.PhotoImage(img)
-                
-                label = tk.Label(self.RED, image=img,width=self.wid*2, height=height, text = "zGran", bg="red")
-                label.image = img
-                self.listRed.append(label)
+            
+        self.height =20
+        
+        
+        img = Image.new("RGB",(1,1),"red")
+        img = ImageTk.PhotoImage(img)
+        label = tk.Label(self.RED, image=img,width=self.wid*2, height=self.height, text = "zGran", bg="red")
+        label.image = img
+        self.listRed.append(label)
 
-                label = tk.Label(self.GREEN, image=img,width=self.wid*2, height=height, text = "zGran", bg="green")
-                label.image = img
-                self.listGreen.append(label)
+        img = Image.new("RGB",(1,1),"green")
+        img = ImageTk.PhotoImage(img)
+        label = tk.Label(self.GREEN, image=img,width=self.wid*2, height=self.height, text = "zGran", bg="green")
+        label.image = img
+        self.listGreen.append(label)
 
-                img = Image.open(img_dir)
-                img = img.resize((self.wid*2,self.hey))
-                img = ImageTk.PhotoImage(img)
-                label = tk.Label(self.YELLOW, image=img,width=self.wid*2, height=height, text = "zGran",bg='yellow')
-                label.image = img
-                self.listYellow.append(label)
+        img = Image.new("RGB",(1,1),"yellow")
+        img = ImageTk.PhotoImage(img)
+        label = tk.Label(self.YELLOW, image=img,width=self.wid*2, height=self.height, text = "zGran",bg='yellow')
+        label.image = img
+        self.listYellow.append(label)
 
 
-                img = Image.new("RGB",(1,1),"blue")
-                img = ImageTk.PhotoImage(img)
-                label = tk.Label(self.BLUE, image=img,width=self.wid*2, height=height, text = "zGran",bg='blue')
-                label.image = img
-                self.listBlue.append(label)
+        img = Image.new("RGB",(1,1),"blue")
+        img = ImageTk.PhotoImage(img)
+        label = tk.Label(self.BLUE, image=img,width=self.wid*2, height=self.height, text = "zGran",bg='blue')
+        label.image = img
+        self.listBlue.append(label)
 
-                label = tk.Label(self.MUAD, image=img,width=self.wid*2, height=height, text = "zGran")
-                label.image = img
-                self.listMuad.append(label)
 
-                label = tk.Label(self.EMPEROR, image=img,width=self.wid*2, height=height, text = "zGran")
-                label.image = img
-                self.listEmperor.append(label)
         # TODO Сделать раздачу 6 игрокам
         # if
 
@@ -411,6 +465,14 @@ class Example:
                 button.image = img
                 button.bind('<Button-1>',self.SelectCardPlayer)
                 self.listEmperor.append(button)
+            
+            img = Image.new("RGB",(1,1),"white")
+            img = ImageTk.PhotoImage(img)
+            label = tk.Label(self.EMPEROR, image=img,width=self.wid*2, height=self.hey, text = "zGran", bg='white')
+            label.image = img
+            self.listEmperor.append(label)
+            self.Redraw(self.listEmperor)
+
 
             directoryM = ".\Images\\M\\"
             files = []
@@ -430,13 +492,19 @@ class Example:
                 button.image = img
                 button.bind('<Button-1>',self.SelectCardPlayer)
                 self.listMuad.append(button)
-            self.Redraw(self.listEmperor)
+
+            img = Image.new("RGB",(1,1),"teal")
+            img = ImageTk.PhotoImage(img)
+            label = tk.Label(self.MUAD, image=img,width=self.wid*2, height=self.hey, text = "zGran", bg='teal')
+            label.image = img
+            self.listMuad.append(label)
             self.Redraw(self.listMuad)
         
 
 
     # Добавление карт из империума
     def AddCard(self,e):
+        self.Saving()
         try:
             # Заранее перерисовываем карту
             w = e.widget
@@ -540,20 +608,30 @@ class Example:
     def Redraw(self, listColor):
         n=0
         flagEndS = 0
+        
         for card in listColor:
+            # card.destroy()
             r = n//2+1+flagEndS
             c = n%2
+            if card['width'] != self.wid:
+                if card['text']!='zGran':
+                    img = Image.open(card['text'])
+                    img = img.resize((self.wid,self.hey))
+                    img = ImageTk.PhotoImage(img)
+                    card['image'] = img
+                    card.image = img
+                card['width'] = self.wid
+                card['height'] = self.hey
             card.grid(row=r,column=c)
             if "zGran" in card["text"] and flagEndS==0:
                 # r+=1
                 flagEndS=2
                 n=(n)//2*2-1
+                card['height'] = self.height
                 card.grid(column=0,row=r+1,columnspan=2)
             else:
                 pass
             n+=1
-        # r = n//2+1+flagEndS
-        # c = n%2
         listColor[0].grid(row=r,column=c)
         listColor[0].grid(row=1,column=0)
         pass
@@ -570,6 +648,7 @@ class Example:
         
     # Удаление карты
     def DeleteCard(self):
+        self.Saving()
         if self.curButt['bg']=='red':
             self.listRed.remove(self.curButt)
             self.Redraw(self.listRed)
@@ -600,5 +679,5 @@ class Example:
             self.LabelSMF["text"] = str(int(self.LabelSMF["text"])+1)
         elif self.curButt["text"] == ".\Images\W\Fold.png":
             self.LabelFold["text"] = str(int(self.LabelFold["text"])+1)
-        self.curButt.destroy()
+        self.curButt.grid_forget()
 okno = Example()
