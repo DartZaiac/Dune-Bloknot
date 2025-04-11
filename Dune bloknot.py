@@ -276,6 +276,9 @@ class Example:
         else:
             self.wid = int(self.SizeMode.get()[0:2])
             self.hey = int(self.SizeMode.get()[3:])
+        self.CardArrakin.destroy()
+        self.CardFold.destroy()
+        self.CardSMF.destroy()
         self.Loading()
 
     def ModeRadio(self):
