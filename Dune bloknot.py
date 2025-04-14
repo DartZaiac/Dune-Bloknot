@@ -3,14 +3,13 @@ from tkinter import *
 import json
 import os
 from PIL import ImageTk, Image
-from tkinter.messagebox import showinfo, askyesno
+from tkinter.messagebox import askyesno
 import time
 
 class Example:
     def __init__(self):
         # Инициализация кнопки с помощью которой будем работать. Имено здесь будет храниться инфа, кому добавлять карты и какую удалять
         self.curButt = ""
-
         
         # Списки карт каждого игрока
         self.listEmperor = []
@@ -33,10 +32,7 @@ class Example:
 
         # Создаём окно
         self.root = tk.Tk()
-        
         self.root.title("Dune Imperium Блокнот")
-        # self.root.iconbitmap(".\Korzina\Iconka1.ico")
-
 
         # menu left
         self.menu_left = tk.Frame(self.root, bg="#f0f0f0")
@@ -56,7 +52,6 @@ class Example:
         self.menu_left_color.grid(column=0,row=1)
         self.menu_left_Delete.grid(column=0,row=2)
         
-
         # Добавляем кружки выбора количества игроков
         self.AlwaysOnTop = IntVar(value=1)
         self.Krasit = IntVar(value=0)
@@ -109,6 +104,7 @@ class Example:
         shortList=list(listOfAddons.keys())
         self.listOfAddonsRadio = []
         c=0
+
         # Добавляем все Аддоны из json
         for key in shortList[4:]:
             self.listOfAddonsRadio.append(tk.Radiobutton(self.right_Addons, text=key,  value=listOfAddons[key], variable=self.Addon, command=self.SmenaAddona, anchor="w"))
@@ -122,7 +118,6 @@ class Example:
         self.right_Addons.grid(row=0,column=0)
         self.right_Imperium_Cards.grid(row=1,column=0)
         self.right_down_worm.grid(row=2,column=0,sticky="ew")
-        
 
         self.wid = 51
         self.hey = 70
@@ -151,8 +146,6 @@ class Example:
         self.LabelFold.grid(row=0,column=2,ipadx=0,ipady=0,padx=0,pady=0)
         self.LabelSMF.grid(row=0,column=4,ipadx=0,ipady=0,padx=0,pady=0)
 
-
-
         self.root.grid_rowconfigure(1, weight=1)
         self.root.grid_columnconfigure(1, weight=1)
         self.listOfButtonsButt = []
@@ -167,7 +160,6 @@ class Example:
         img = ImageTk.PhotoImage(img)
         self.DrawCard = tk.Label(self.right_Imperium_Cards,image=img)
         self.DrawCard.image = img
-        # self.DrawCard.grid(row=5,column=15,columnspan=3,rowspan=3,)
 
         # Подготавливаем стартовые карты
         self.StartCards()
@@ -176,7 +168,7 @@ class Example:
         self.SmenaAddona()
 
         # Запускаем аддон
-        # !!!!!!!!!!!!!!!!!!!
+        # ---------------------------------------------------------------------------------
         self.root.call('wm', 'attributes', '.', '-topmost', '1') 
         self.Saving()
         self.root.mainloop()
@@ -249,33 +241,27 @@ class Example:
     def Arrakin(self):
         if int(self.LabelArrakin["text"])>0:
             if self.AddCard(self.CardArrakin):
-                # self.Saving()
                 self.LabelArrakin["text"] = str(int(self.LabelArrakin["text"])-1)
-                # self.CardArrakin["state"]="normal"
 
     def Fold(self):
         if int(self.LabelFold["text"])>0:
             if self.AddCard(self.CardFold):
-                # self.Saving()
                 self.LabelFold["text"] = str(int(self.LabelFold["text"])-1)
-                # self.CardFold["state"]="normal"
+
     def SMF(self):
         if int(self.LabelSMF["text"])>0:
             if self.AddCard(self.CardSMF):
-                # self.Saving()
                 self.LabelSMF["text"] = str(int(self.LabelSMF["text"])-1)
-                # self.CardSMF["state"]="normal"
     
     def ChangeSize(self):
         self.Saving()
-        # self.Saving()
-        # self.listOfDisabled = []
         if self.SizeMode.get() == "72x100":
             self.wid=72
             self.hey=100
         else:
             self.wid = int(self.SizeMode.get()[0:2])
             self.hey = int(self.SizeMode.get()[3:])
+        self.entered(self.DrawCard)
         self.CardArrakin.destroy()
         self.CardFold.destroy()
         self.CardSMF.destroy()
@@ -316,8 +302,7 @@ class Example:
 
         # Добавляем все пути до картинок в список картинок по ценам
         for f in files:
-            # if f[0]==self.Addon.get():
-                self.listOfButtons[str(f[1])].append(str(f))
+            self.listOfButtons[str(f[1])].append(str(f))
 
         maxi = max([len(self.listOfButtons[str(6)]),len(self.listOfButtons[str(7)]),len(self.listOfButtons[str(8)])])
         
@@ -329,16 +314,7 @@ class Example:
             for but in self.listOfButtons[str(price)]:
                 img_dir = directory + but
                 
-                # Размер картинок
-                # w = 35
-                # h = 49
-
-                # w=50
-                # h = 70
-
                 if img_dir not in self.listOfDisabled: 
-                # and self.Krasit.get() == 1:
-                    # button['state'] = 'disabled'
                     img = Image.open(img_dir)
                     img = img.resize((self.wid,self.hey))
                     img = ImageTk.PhotoImage(img)
@@ -354,13 +330,6 @@ class Example:
                                 
                     col+=1
 
-        try:
-            # self.CardArrakin.destroy()        
-            # self.CardFold.destroy()
-            # self.CardSMF.destroy()
-            pass
-        except:
-            pass
         img = Image.open(".\\Images\\W\\Arrakin.png")
         img = img.resize((self.wid,self.hey))
         img = ImageTk.PhotoImage(img)
@@ -396,10 +365,10 @@ class Example:
         img = Image.open(w['text'])
         img = img.resize((self.wid*3,self.hey*3))
         img = ImageTk.PhotoImage(img)
+        self.DrawCard['text'] = w['text']
         self.DrawCard['image'] = img
         self.DrawCard.image = img
-        # self.root.config(cursor="plus")
-        # print("enter")
+
     # Раздача игрокам стартовых карт
     def StartCards(self):
         for card in self.listGreen:
@@ -469,7 +438,6 @@ class Example:
             
         self.height =20
         
-        
         img = Image.new("RGB",(1,1),"red")
         img = ImageTk.PhotoImage(img)
         label = tk.Label(self.RED, image=img,width=self.wid*2, height=self.height, text = "zGran", bg="red")
@@ -494,10 +462,6 @@ class Example:
         label = tk.Label(self.BLUE, image=img,width=self.wid*2, height=self.height, text = "zGran",bg='blue')
         label.image = img
         self.listBlue.append(label)
-
-
-        # TODO Сделать раздачу 6 игрокам
-        # if
 
         # отрисовка кнопок-карт игроков
         self.Redraw(self.listRed)
@@ -543,9 +507,6 @@ class Example:
             for f in files:
                 img_dir = directoryM + f
                 
-                # w=25
-                # h = 35
-                
                 img = Image.open(img_dir)
                 img = img.resize((self.wid, self.hey))
                 img = ImageTk.PhotoImage(img)
@@ -564,8 +525,6 @@ class Example:
             self.listMuad.append(label)
             self.Redraw(self.listMuad)
         
-
-
     # Добавление карт из империума
     def AddCard(self,e):
         self.Saving()
@@ -574,8 +533,6 @@ class Example:
             w = e.widget
         except:
             w=e
-        # wid =25
-        # h = 35
         img = Image.open( w['text'])
         img = img.resize((self.wid, self.hey))
         img = ImageTk.PhotoImage(img)
@@ -613,8 +570,6 @@ class Example:
                     bg = 'white'
                 # Добавляем карту в список неактивных
                 self.listOfDisabled.append(w["text"])
-                # if self.Krasit.get() == 1:
-                #     w["state"] = "disabled"
                 # Добавляем кнопку 
                 button = tk.Button(field, width=self.wid, height=self.hey,bd=0, image = img, bg=bg, text = w["text"])
                 button.image = img
@@ -652,7 +607,6 @@ class Example:
                 card['height'] = self.hey
             card.grid(row=r,column=c)
             if "zGran" in card["text"] and flagEndS==0:
-                # r+=1
                 flagEndS=2
                 n=(n)//2*2-1
                 card['height'] = self.height
