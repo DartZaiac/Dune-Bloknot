@@ -10,7 +10,8 @@ class Example:
     def __init__(self):
         # Инициализация кнопки с помощью которой будем работать. Имено здесь будет храниться инфа, кому добавлять карты и какую удалять
         self.curButt = ""
-        
+        self.Epic=True
+
         # Списки карт каждого игрока
         self.listEmperor = []
         self.listMuad = []
@@ -96,7 +97,11 @@ class Example:
         # Область с картами Империума
         self.right_Imperium_Cards = tk.Frame(self.right, )
 
-        # Область с Сёстрами/Червём/Свёрнутым пространством TODO доделать!
+        self.FindFrame = tk.Frame(self.right)
+        self.FindLabel = tk.Label(self.FindFrame,text="Find card:")
+        self.FindString = tk.Entry(self.FindFrame)
+
+        # Область с Сёстрами/Червём/Свёрнутым пространством
         self.right_down_worm = tk.Frame(self.right, )
 
         # Стартуем с Дюны Империи
@@ -114,10 +119,16 @@ class Example:
         # Размещаем панели
         self.menu_left.grid(row=0, column=0, rowspan=2, sticky="nsew")
         self.menu_size.grid(row=2,column=0,columnspan=1)
+
         self.right.grid(row=0, column=1, sticky="ew")
         self.right_Addons.grid(row=0,column=0)
-        self.right_Imperium_Cards.grid(row=1,column=0)
-        self.right_down_worm.grid(row=2,column=0,sticky="ew")
+        self.right_Imperium_Cards.grid(row=2,column=0)
+        self.right_down_worm.grid(row=3,column=0,sticky="ew")
+
+        self.FindFrame.grid(row=1,column=0)
+        self.FindLabel.grid(row=1,column=0)
+        self.FindString.grid(row=1,column=1,columnspan=1)
+        self.FindString.bind("<KeyRelease>",self.Finding)
 
         self.wid = 51
         self.hey = 70
@@ -173,6 +184,10 @@ class Example:
         self.Saving()
         self.root.mainloop()
 
+    def Finding(self,e):
+        # time.sleep(1)
+        self.SmenaAddona()
+    
     def Delete(self,e):
         try:
             w = e.widget
@@ -302,7 +317,8 @@ class Example:
 
         # Добавляем все пути до картинок в список картинок по ценам
         for f in files:
-            self.listOfButtons[str(f[1])].append(str(f))
+            if self.FindString.get().lower() in f.lower():
+                self.listOfButtons[str(f[1])].append(str(f))
 
         maxi = max([len(self.listOfButtons[str(6)]),len(self.listOfButtons[str(7)]),len(self.listOfButtons[str(8)])])
         
