@@ -43,7 +43,7 @@ class Example:
         self.menu_left_color = tk.Frame(self.menu_left,  )
 
         # Поле для кнопки удаления
-        self.menu_left_Delete = tk.Frame(self.menu_left,  bg="#ff00ff")
+        # self.menu_left_Delete = tk.Frame(self.menu_left,  bg="#ff00ff")
 
         # поле размеров
         self.menu_size = tk.Frame(self.root)
@@ -51,21 +51,31 @@ class Example:
         # Размещаем левые поля
         self.menu_left_upper.grid(column=0,row=0)
         self.menu_left_color.grid(column=0,row=1)
-        self.menu_left_Delete.grid(column=0,row=2)
+        # self.menu_left_Delete.grid(column=0,row=2)
         
         # Добавляем кружки выбора количества игроков
         self.AlwaysOnTop = IntVar(value=1)
         self.Krasit = IntVar(value=0)
+        self.Dark = IntVar(value=0)
         self.mode  = StringVar(value="play4") 
+
+        	
+        self.Poyasnenie = tk.Label(self.menu_left_upper,text = "ЛКМ - выбор цвета. ПКМ - удаление карты")
+
         self.play4 = tk.Radiobutton(self.menu_left_upper, text="4 players",  value="play4", variable=self.mode, command=self.ModeRadio)
         self.play6 = tk.Radiobutton(self.menu_left_upper, text="6 players", value="play6", variable=self.mode, command=self.ModeRadio)
         self.AlwaysOnTopCheck = tk.Checkbutton(self.menu_left_upper, text = "Alwats on Top",variable=self.AlwaysOnTop,command=self.AlwaysOnTopFunc)
-        self.play4.grid(row = 1, column = 0)
-        self.play6.grid(row = 1, column = 1)
+
+        self.Poyasnenie.grid(row=1,column=0,columnspan=4)
+
+        self.play4.grid(row = 2, column = 0,columnspan=2)
+        self.play6.grid(row = 2, column = 2,columnspan=2)
         self.AlwaysOnTopCheck.grid(column=0,row=0,columnspan=1)
         self.Pokras = tk.Checkbutton(self.menu_left_upper, text = "Красить карты?",variable=self.Krasit,)
         self.Pokras.grid(column=1,row=0,columnspan=1)
 
+        self.Dark = tk.Checkbutton(self.menu_left_upper, text = "Тёмный режим",variable=self.Dark,)
+        self.Dark.grid(column=2,row=0,columnspan=1)
 
         # Menu Colors. Поля цветов игроков       
         self.RED = tk.Frame(self.menu_left_color, bg="red", borderwidth=2)
@@ -87,8 +97,8 @@ class Example:
         self.BLUE.grid(column=5,row=1)
 
         # Кнопка удаления выбраной кнопки
-        self.delete_all = tk.Button(self.menu_left_Delete,text = "Delete", )
-        self.delete_all.bind('<Button-1>',self.DeleteCard)
+        # self.delete_all = tk.Button(self.menu_left_Delete,text = "Delete", )
+        # self.delete_all.bind('<Button-1>',self.DeleteCard)
 
         # Правая область вся
         self.right = tk.Frame(self.root, bg="#dfdfdf")
@@ -163,7 +173,7 @@ class Example:
 
         
         self.LoadButt = tk.Button(self.menu_left_upper, text = "UNDO", command=self.Loading)
-        self.LoadButt.grid(row=0,column=2)
+        self.LoadButt.grid(row=0,column=3)
         self.listSAVE=[]
 
         img = Image.new("RGB",(1,1),"blue")
@@ -485,7 +495,7 @@ class Example:
         self.Redraw(self.listYellow)
         self.Redraw(self.listBlue)
         # Отрисовка кнопки удаления
-        self.delete_all.grid  (column=0, row=0, columnspan=1)
+        # self.delete_all.grid  (column=0, row=0, columnspan=1)
 
         if self.mode.get() == "play6":
             directoryE = ".\\Images\\E\\"
@@ -651,32 +661,24 @@ class Example:
         except:
             self.curButt = e
         self.Saving()
-        # if self.curButt['text']=="Delete":
-        #     print(123)
-        #     pass
-        # el
+
         if self.curButt['bg']=='red':
             self.listRed.remove(self.curButt)
             self.Redraw(self.listRed)
         elif self.curButt['bg']=='green':
             self.listGreen.remove(self.curButt)
-            # self.curButt.destroy()
             self.Redraw(self.listGreen)
         elif self.curButt['bg']=='yellow':
             self.listYellow.remove(self.curButt)
-            # self.curButt.destroy()
             self.Redraw(self.listYellow)
         elif self.curButt['bg']=='blue':
             self.listBlue.remove(self.curButt)
-            # self.curButt.destroy()
             self.Redraw(self.listBlue)
         elif self.curButt['bg']=='white':
             self.listEmperor.remove(self.curButt)
-            # self.curButt.destroy()
             self.Redraw(self.listEmperor)
         elif self.curButt['bg']=='teal':
             self.listMuad.remove(self.curButt)
-            # self.curButt.destroy()
             self.Redraw(self.listMuad)
         
         if self.curButt["text"] == ".\\Images\\W\\Arrakin.png":
@@ -685,5 +687,5 @@ class Example:
             self.LabelSMF["text"] = str(int(self.LabelSMF["text"])+1)
         elif self.curButt["text"] == ".\\Images\\W\\Fold.png":
             self.LabelFold["text"] = str(int(self.LabelFold["text"])+1)
-        # self.curButt.grid_forget()
+        self.curButt.grid_forget()
 okno = Example()
