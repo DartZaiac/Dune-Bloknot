@@ -43,7 +43,7 @@ class Example:
         self.menu_left_color = tk.Frame(self.menu_left,  )
 
         # Поле для кнопки удаления
-        self.menu_left_Delete = tk.Frame(self.menu_left,  bg="blue")
+        self.menu_left_Delete = tk.Frame(self.menu_left,  bg="#ff00ff")
 
         # поле размеров
         self.menu_size = tk.Frame(self.root)
@@ -651,6 +651,10 @@ class Example:
         except:
             self.curButt = e
         self.Saving()
+        # if self.curButt['text']=="Delete":
+        #     print(123)
+        #     pass
+        # el
         if self.curButt['bg']=='red':
             self.listRed.remove(self.curButt)
             self.Redraw(self.listRed)
@@ -681,5 +685,5 @@ class Example:
             self.LabelSMF["text"] = str(int(self.LabelSMF["text"])+1)
         elif self.curButt["text"] == ".\\Images\\W\\Fold.png":
             self.LabelFold["text"] = str(int(self.LabelFold["text"])+1)
-        self.curButt.grid_forget()
+        # self.curButt.grid_forget()
 okno = Example()

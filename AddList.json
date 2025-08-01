@@ -3,11 +3,13 @@
     "Worm":"W",
     "Emperor":"E",
     "Muad":"M",
+    "Classic":"Classic",
+    "Uprising":"Uprising",    
     "Imperium":"I",
     "Rise of Ix":"X",
     "Immortality":"O",
     "Graft":"G",
-    "Uprising":"U",
+    "Uprising Clear":"Q",
     "Bloodlines":"B",
     "Custom":"C"
 }
