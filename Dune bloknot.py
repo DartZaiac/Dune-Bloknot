@@ -8,6 +8,12 @@ import time
 
 class Example:
     def __init__(self):
+
+        # Цвета для окна
+        # self.darkColor = "#222222"
+        # self.whiteColor = "#f0f0f0"
+        self.mainColor = "#f0f0f0"
+
         # Инициализация кнопки с помощью которой будем работать. Имено здесь будет храниться инфа, кому добавлять карты и какую удалять
         self.curButt = ""
         self.Epic=True
@@ -34,9 +40,10 @@ class Example:
         # Создаём окно
         self.root = tk.Tk()
         self.root.title("Dune Imperium Блокнот")
+        self.root.resizable(False,False)
 
         # menu left
-        self.menu_left = tk.Frame(self.root, bg="#f0f0f0")
+        self.menu_left = tk.Frame(self.root, bg=self.mainColor)
         # Поле для режима игроков (4 или 6)
         self.menu_left_upper = tk.Frame(self.menu_left,   )
         # Поле для 4 полей колод игроков
@@ -46,7 +53,9 @@ class Example:
         # self.menu_left_Delete = tk.Frame(self.menu_left,  bg="#ff00ff")
 
         # поле размеров
-        self.menu_size = tk.Frame(self.root)
+        self.menu_size_all = tk.Frame(self.root, bg="#FF00FF", width=200, height=200)
+        # self.menu_size.grid_propagate(False)
+        self.menu_size_all.grid(row=2,column=0,columnspan=1, )
         
         # Размещаем левые поля
         self.menu_left_upper.grid(column=0,row=0)
@@ -74,8 +83,8 @@ class Example:
         self.Pokras = tk.Checkbutton(self.menu_left_upper, text = "Красить карты?",variable=self.Krasit,)
         self.Pokras.grid(column=1,row=0,columnspan=1)
 
-        self.Dark = tk.Checkbutton(self.menu_left_upper, text = "Тёмный режим",variable=self.Dark,)
-        self.Dark.grid(column=2,row=0,columnspan=1)
+        self.DarkCheckButt = tk.Checkbutton(self.menu_left_upper, text = "Тёмный режим",variable=self.Dark,command=self.DarkModeFunk)
+        self.DarkCheckButt.grid(column=2,row=0,columnspan=1)
 
         # Menu Colors. Поля цветов игроков       
         self.RED = tk.Frame(self.menu_left_color, bg="red", borderwidth=2)
@@ -101,9 +110,9 @@ class Example:
         # self.delete_all.bind('<Button-1>',self.DeleteCard)
 
         # Правая область вся
-        self.right = tk.Frame(self.root, bg="#dfdfdf")
+        self.right = tk.Frame(self.root, bg=self.mainColor)
         # Строка с аддонами
-        self.right_Addons = tk.Frame(self.right, bg="#dfdfdf")
+        self.right_Addons = tk.Frame(self.right, bg=self.mainColor)
         # Область с картами Империума
         self.right_Imperium_Cards = tk.Frame(self.right, )
 
@@ -115,7 +124,7 @@ class Example:
         self.right_down_worm = tk.Frame(self.right, )
 
         # Стартуем с Дюны Империи
-        self.Addon = StringVar(value="I")
+        self.Addon = StringVar(value="Classic")
         shortList=list(listOfAddons.keys())
         self.listOfAddonsRadio = []
         c=0
@@ -128,7 +137,7 @@ class Example:
 
         # Размещаем панели
         self.menu_left.grid(row=0, column=0, rowspan=2, sticky="nsew")
-        self.menu_size.grid(row=2,column=0,columnspan=1)
+        
 
         self.right.grid(row=0, column=1, sticky="ew")
         self.right_Addons.grid(row=0,column=0)
@@ -145,23 +154,23 @@ class Example:
 
         self.SizeMode  = StringVar(value="51x70")
 
-        self.menu_size_radio72 = tk.Radiobutton(self.menu_size, text="72x100", value="72x100", variable=self.SizeMode, command=self.ChangeSize)
-        self.menu_size_radio58 = tk.Radiobutton(self.menu_size, text="58x80" ,value="58x80", variable=self.SizeMode, command=self.ChangeSize)
-        self.menu_size_radio51 = tk.Radiobutton(self.menu_size, text="51x70" ,value="51x70", variable=self.SizeMode, command=self.ChangeSize)
-        self.menu_size_radio44 = tk.Radiobutton(self.menu_size, text="44x60" ,value="44x60", variable=self.SizeMode, command=self.ChangeSize)
-        self.menu_size_radio37 = tk.Radiobutton(self.menu_size, text="37x50" ,value="37x50", variable=self.SizeMode, command=self.ChangeSize)
-        self.menu_size_radio35 = tk.Radiobutton(self.menu_size, text="35x49" ,value="35x49", variable=self.SizeMode, command=self.ChangeSize)
+        self.menu_size_radio72 = tk.Radiobutton(self.menu_size_all, text="72x100", value="72x100", variable=self.SizeMode, command=self.ChangeSize)
+        self.menu_size_radio58 = tk.Radiobutton(self.menu_size_all, text="58x80" ,value="58x80", variable=self.SizeMode, command=self.ChangeSize)
+        self.menu_size_radio51 = tk.Radiobutton(self.menu_size_all, text="51x70" ,value="51x70", variable=self.SizeMode, command=self.ChangeSize)
+        self.menu_size_radio44 = tk.Radiobutton(self.menu_size_all, text="44x60" ,value="44x60", variable=self.SizeMode, command=self.ChangeSize)
+        self.menu_size_radio37 = tk.Radiobutton(self.menu_size_all, text="37x50" ,value="37x50", variable=self.SizeMode, command=self.ChangeSize)
+        self.menu_size_radio35 = tk.Radiobutton(self.menu_size_all, text="35x49" ,value="35x49", variable=self.SizeMode, command=self.ChangeSize)
 
-        self.menu_size_radio72.grid(column=0,row=0)
-        self.menu_size_radio58.grid(column=1,row=0)
-        self.menu_size_radio51.grid(column=2,row=0)
-        self.menu_size_radio44.grid(column=3,row=0)
-        self.menu_size_radio37.grid(column=4,row=0)
-        self.menu_size_radio35.grid(column=5,row=0)
+        self.menu_size_radio72.grid(column=0, row=0)
+        self.menu_size_radio58.grid(column=1, row=0)
+        self.menu_size_radio51.grid(column=2, row=0)
+        self.menu_size_radio44.grid(column=3, row=0)
+        self.menu_size_radio37.grid(column=4, row=0)
+        self.menu_size_radio35.grid(column=5, row=0)
 
-        self.LabelArrakin = tk.Label(self.right_down_worm,text="8")
-        self.LabelFold = tk.Label(self.right_down_worm,text = "6")
-        self.LabelSMF = tk.Label(self.right_down_worm,text = "10")
+        self.LabelArrakin = tk.Label(self.right_down_worm,text = "8")
+        self.LabelFold    = tk.Label(self.right_down_worm,text = "6")
+        self.LabelSMF     = tk.Label(self.right_down_worm,text = "10")
         
         self.LabelArrakin.grid(row=0,column=0,ipadx=0,ipady=0,padx=0,pady=0)
         self.LabelFold.grid(row=0,column=2,ipadx=0,ipady=0,padx=0,pady=0)
@@ -174,9 +183,11 @@ class Example:
         
         self.LoadButt = tk.Button(self.menu_left_upper, text = "UNDO", command=self.Loading)
         self.LoadButt.grid(row=0,column=3)
+        self.ArrowButt = tk.Button(self.menu_left_upper, text = "◄", font=("Helvetica", 12, "bold"), command=self.HideShowRight)
+        self.ArrowButt.grid(row=1,column=3)
         self.listSAVE=[]
 
-        img = Image.new("RGB",(1,1),"blue")
+        img = Image.new("RGB",(1,1),"#f0f0f0")
         img = img.resize((self.wid*3,self.hey*3))
         img = ImageTk.PhotoImage(img)
         self.DrawCard = tk.Label(self.right_Imperium_Cards,image=img)
@@ -193,6 +204,23 @@ class Example:
         self.root.call('wm', 'attributes', '.', '-topmost', '1') 
         self.Saving()
         self.root.mainloop()
+
+    def HideShowRight(self):
+        if self.ArrowButt['text']=='◄':
+            self.ArrowButt['text']='►'
+            self.sizeX = str(self.root.winfo_width())
+            self.sizeY = str(self.root.winfo_height())
+            if self.mode.get() == "play4":
+                self.root.geometry(str(max(int((self.wid+4.)*8),375))+'x'+self.sizeY)
+            else:
+                self.root.geometry(str(max(int((self.wid+4.)*12),375))+'x'+self.sizeY)
+            # self.root.resizable(True,True)
+            
+        else:
+            self.ArrowButt['text']='◄'
+            self.root.geometry(self.sizeX+'x'+self.sizeY)
+        # self.root.resizable(True,True)
+        # print(self.root.geometry())
 
     def Finding(self,e):
         # time.sleep(1)
@@ -238,10 +266,7 @@ class Example:
                 pack.grid_forget()
             for pack in self.listRed:
                 pack.grid_forget()
-            for pack in self.listEmperor:
-                pack.grid_forget()
-            for pack in self.listMuad:
-                pack.grid_forget()
+            
             self.listRed =              self.listSAVE[-1][0][:]
             self.listGreen =            self.listSAVE[-1][1][:]
             self.listYellow =           self.listSAVE[-1][2][:]
@@ -262,6 +287,10 @@ class Example:
             if self.mode.get() == "play6":
                 self.Redraw(self.listEmperor)
                 self.Redraw(self.listMuad)
+                for pack in self.listEmperor:
+                    pack.grid_forget()
+                for pack in self.listMuad:
+                    pack.grid_forget()
 
     def Arrakin(self):
         if int(self.LabelArrakin["text"])>0:
@@ -286,17 +315,79 @@ class Example:
         else:
             self.wid = int(self.SizeMode.get()[0:2])
             self.hey = int(self.SizeMode.get()[3:])
-        self.entered(self.DrawCard)
+        self.EnteredCard(self.DrawCard)
         self.CardArrakin.destroy()
         self.CardFold.destroy()
         self.CardSMF.destroy()
+        
         self.Loading()
+        pass
 
     def ModeRadio(self):
         if self.mode.get() == "play4":
             self.StartCards()
         else:
             self.StartCards()
+
+    def DarkModeFunk(self):
+                # self.darkColor = "#222222"
+        # self.whiteColor = "#f0f0f0"
+        if self.Dark.get() == 1:
+            # print("Dark")
+            self.mainColor = "#222222"
+            self.TextColor = "#7F7F7F"
+        else:
+            # print("White")
+            self.mainColor = "#f0f0f0"
+            self.TextColor = "#000000"
+        self.right['bg'] = self.mainColor
+        self.menu_left['bg'] = self.mainColor
+        self.menu_left_upper['bg'] = self.mainColor
+        self.right_down_worm['bg'] = self.mainColor
+        self.right_Imperium_Cards['bg'] = self.mainColor
+        
+        self.root.configure(background=self.mainColor)
+
+        self.menu_size_radio35['bg'] = self.mainColor
+        self.menu_size_radio37['bg'] = self.mainColor
+        self.menu_size_radio44['bg'] = self.mainColor
+        self.menu_size_radio51['bg'] = self.mainColor
+        self.menu_size_radio58['bg'] = self.mainColor
+        self.menu_size_radio72['bg'] = self.mainColor
+        self.menu_size_radio35['fg'] = self.TextColor
+        self.menu_size_radio37['fg'] = self.TextColor
+        self.menu_size_radio44['fg'] = self.TextColor
+        self.menu_size_radio51['fg'] = self.TextColor
+        self.menu_size_radio58['fg'] = self.TextColor
+        self.menu_size_radio72['fg'] = self.TextColor
+        self.AlwaysOnTopCheck['bg'] = self.mainColor
+        self.AlwaysOnTopCheck['fg'] = self.TextColor
+        self.Pokras['bg'] = self.mainColor
+        self.Pokras['fg'] = self.TextColor
+        self.DarkCheckButt['bg'] = self.mainColor
+        self.DarkCheckButt['fg'] = self.TextColor
+        self.Poyasnenie['bg'] = self.mainColor
+        self.Poyasnenie['fg'] = self.TextColor
+        self.play4['bg'] = self.mainColor
+        self.play4['fg'] = self.TextColor
+        self.play6['bg'] = self.mainColor
+        self.play6['fg'] = self.TextColor
+        self.LabelArrakin['bg'] = self.mainColor
+        self.LabelArrakin['fg'] = self.TextColor
+        self.LabelFold['bg'] = self.mainColor
+        self.LabelFold['fg'] = self.TextColor
+        self.LabelSMF['bg'] = self.mainColor
+        self.LabelSMF['fg'] = self.TextColor
+        self.FindLabel['bg'] = self.mainColor
+        self.FindLabel['fg'] = self.TextColor
+        self.LoadButt['bg'] = self.mainColor
+        self.LoadButt['fg'] = self.TextColor
+        self.ArrowButt['bg'] = self.mainColor
+        self.ArrowButt['fg'] = self.TextColor
+        
+        for Addon in self.listOfAddonsRadio:
+            Addon['bg'] = self.mainColor
+            Addon['fg'] = self.TextColor
 
     def AlwaysOnTopFunc(self):
         if self.AlwaysOnTop.get() == 1:
@@ -318,6 +409,7 @@ class Example:
             "6":[],
             "7":[],
             "8":[],
+            "9":[],
         }
         directory = ".\\Images\\"+self.Addon.get()+"\\"
         # Создаем пустой список
@@ -334,7 +426,7 @@ class Example:
         
         # Список самих кнопок
         self.listOfButtonsButt =[]
-        for price in range(1,9):
+        for price in range(1,10):
             col=1
             
             for but in self.listOfButtons[str(price)]:
@@ -352,7 +444,7 @@ class Example:
                     button.grid(row=price-1,column=col,ipadx=0,ipady=0,padx=0,pady=0)
                     button.bind('<Button-1>',self.AddCard)
                     button.bind('<Button-3>',self.Delete)
-                    button.bind('<Enter>', self.entered)
+                    button.bind('<Enter>', self.EnteredCard)
                                 
                     col+=1
 
@@ -362,7 +454,7 @@ class Example:
         self.CardArrakin = tk.Button(self.right_down_worm,width=self.wid,height=self.hey,bd=0,image = img,command=self.Arrakin, text = ".\\Images\\W\\Arrakin.png")
         self.CardArrakin.image = img
         self.CardArrakin.grid(column=1,row=0)
-        self.CardArrakin.bind("<Enter>", self.entered)
+        self.CardArrakin.bind("<Enter>", self.EnteredCard)
 
         img = Image.open(".\\Images\\W\\Fold.png")
         img = img.resize((self.wid,self.hey))
@@ -370,7 +462,7 @@ class Example:
         self.CardFold = tk.Button(self.right_down_worm,width=self.wid,height=self.hey,bd=0,image = img, text=".\\Images\\W\\Fold.png",command=self.Fold)
         self.CardFold.image = img
         self.CardFold.grid(column=3,row=0)
-        self.CardFold.bind("<Enter>", self.entered)
+        self.CardFold.bind("<Enter>", self.EnteredCard)
 
         img = Image.open(".\\Images\\W\\Worm.png")
         img = img.resize((self.wid,self.hey))
@@ -378,22 +470,25 @@ class Example:
         self.CardSMF = tk.Button(self.right_down_worm,width=self.wid,height=self.hey,bd=0,image = img, text = ".\\Images\\W\\Worm.png",command=self.SMF)
         self.CardSMF.image = img
         self.CardSMF.grid(column=5,row=0)
-        self.CardSMF.bind("<Enter>", self.entered)
+        self.CardSMF.bind("<Enter>", self.EnteredCard)
 
         self.DrawCard.grid(row=5,column= maxi+2,columnspan=3,rowspan=3,)
         
-    def entered(self,e):
+    def EnteredCard(self,e):
         try:
-            w=e.widget
+            try:
+                w=e.widget
+            except:
+                w=e
+            time.sleep(0.01)
+            img = Image.open(w['text'])
+            img = img.resize((self.wid*3,self.hey*3))
+            img = ImageTk.PhotoImage(img)
+            self.DrawCard['text'] = w['text']
+            self.DrawCard['image'] = img
+            self.DrawCard.image = img
         except:
-            w=e
-        time.sleep(0.01)
-        img = Image.open(w['text'])
-        img = img.resize((self.wid*3,self.hey*3))
-        img = ImageTk.PhotoImage(img)
-        self.DrawCard['text'] = w['text']
-        self.DrawCard['image'] = img
-        self.DrawCard.image = img
+            pass
 
     # Раздача игрокам стартовых карт
     def StartCards(self):
@@ -435,28 +530,28 @@ class Example:
                 button = tk.Button(self.RED, image=img,width=self.wid,height=self.hey,bd=0,bg='red',text = img_dir)
                 button.image = img
                 button.bind('<Button-1>',self.SelectCardPlayer)
-                button.bind('<Enter>', self.entered)
+                button.bind('<Enter>', self.EnteredCard)
                 button.bind('<Button-3>',self.DeleteCard)
                 self.listRed.append(button)
 
                 button = tk.Button(self.GREEN, image=img,width=self.wid,height=self.hey,bd=0,bg = 'green',text = img_dir)
                 button.image = img
                 button.bind('<Button-1>',self.SelectCardPlayer)
-                button.bind('<Enter>', self.entered)
+                button.bind('<Enter>', self.EnteredCard)
                 button.bind('<Button-3>',self.DeleteCard)
                 self.listGreen.append(button)
 
                 button = tk.Button(self.YELLOW, image=img,width=self.wid,height=self.hey,bd=0,bg='yellow',text = img_dir)
                 button.image = img
                 button.bind('<Button-1>',self.SelectCardPlayer)
-                button.bind('<Enter>', self.entered)
+                button.bind('<Enter>', self.EnteredCard)
                 button.bind('<Button-3>',self.DeleteCard)
                 self.listYellow.append(button)
                 
                 button = tk.Button(master=self.BLUE, image=img,width=self.wid,height=self.hey,bd=0,bg = 'blue',text = img_dir)
                 button.image = img
                 button.bind('<Button-1>',self.SelectCardPlayer)
-                button.bind('<Enter>', self.entered)
+                button.bind('<Enter>', self.EnteredCard)
                 button.bind('<Button-3>',self.DeleteCard)
                 self.listBlue.append(button)
                 
@@ -514,7 +609,7 @@ class Example:
                 button = tk.Button(self.EMPEROR, image=img, width=self.wid, height=self.hey, bd=0, bg = 'white', text = img_dir)
                 button.image = img
                 button.bind('<Button-1>',self.SelectCardPlayer)
-                button.bind('<Enter>', self.entered)
+                button.bind('<Enter>', self.EnteredCard)
                 button.bind('<Button-3>',self.DeleteCard)
                 self.listEmperor.append(button)
             
@@ -540,7 +635,7 @@ class Example:
                 button = tk.Button(self.MUAD, image=img,width=self.wid,height=self.hey,bd=0,bg='teal', text = img_dir)
                 button.image = img
                 button.bind('<Button-1>',self.SelectCardPlayer)
-                button.bind('<Enter>', self.entered)
+                button.bind('<Enter>', self.EnteredCard)
                 button.bind('<Button-3>',self.DeleteCard)
                 self.listMuad.append(button)
 
@@ -600,7 +695,7 @@ class Example:
                 button = tk.Button(field, width=self.wid, height=self.hey,bd=0, image = img, bg=bg, text = w["text"])
                 button.image = img
                 button.bind('<Button-1>',self.SelectCardPlayer)
-                button.bind('<Enter>', self.entered)
+                button.bind('<Enter>', self.EnteredCard)
                 button.bind('<Button-3>',self.DeleteCard)
                 colorList.append(button)
                 # перерисовываем красныую колоду
